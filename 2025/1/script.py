@@ -1,4 +1,3 @@
-import time
 from collections import defaultdict
 
 # left and right nr, give back a sum of the differences between the not used smallest in left and right
@@ -35,14 +34,8 @@ def main():
 	f = open("input.txt", "r")
 	input = f.read()
 	lines  = input.split('\n')
-	start = time.time()
 	print("Part1", sol.part1(lines))
-	end = time.time()
-	print("Time cost:", end - start)
-	start = time.time()
 	print("Part2", sol.part2(lines))
-	end = time.time()
-	print("Time cost:", end - start)
 	f.close() 
 
 if __name__ == "__main__":
