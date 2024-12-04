@@ -1,16 +1,21 @@
 from collections import Counter
+from icecream import ic # source myenv/bin/activate
 
 class Solution:
 	# set with values time and distance and for part two one number
-	def __init__(self, input):
+	def __init__(self, input, part):
 		self.lines = input.split('\n')
 		self.amountHands = len(self.lines)
-		transform = str.maketrans("AKQT98765432J", "abcdefghijklm")
+		if part == 1:
+			transform = str.maketrans("AKQJT98765432", "abcdefghijklm")
+		else:
+			transform = str.maketrans("AKQT98765432J", "abcdefghijklm")
 		for i in range(len(self.lines)):
 			hand, value = self.lines[i].split()
 			self.lines[i] = [hand.translate(transform), int(value)]
 		self.hands = [[] for _ in range(7)]
 
+	# sort the cards from the same groups and give them a rank
 	def calculateHands(self):
 		rank = self.amountHands
 		total = 0
@@ -20,81 +25,77 @@ class Solution:
 			if len(hand) == 0:
 				continue
 			for cards, value in hand:
-				print(hand, value, total, rank, "i", i)
 				total += value * rank
 				rank -= 1
 			i += 1
 		return total
-    # 0 Five of a kind, where all five cards have the same label: AAAAA
-    # 1 Four of a kind, where four cards have the same label and one card has a different label: AA8AA
-    # 2 Full house, where three cards have the same label, and the remaining two cards share a different label: 23332
-    # 3 Three of a kind, where three cards have the same label, and the remaining two cards are each different from any other card in the hand: TTT98
-    # 4 Two pair, where two cards share one label, two other cards share a second label, and the remaining card has a third label: 23432
-    # 5 One pair, where two cards share one label, and the other three cards have a different label from the pair and each other: A23A4
-    # 6 High card, where all cards' labels are distinct: 23456
 	
+	# adding the cards to the possible groups
+	def addingHands(self, amount, hand, value):
+		if amount[4] == 1: 						# Five of a Kind
+			self.hands[0].append([hand, value])
+		elif amount[3] == 1: 					# Four of a Kind
+			self.hands[1].append([hand, value])
+		elif amount[2] >= 1 and amount[1] >= 1:	# Full house
+			self.hands[2].append([hand, value])
+		elif amount[2]:							# Three of a Kind
+			self.hands[3].append([hand, value])
+		elif amount[1] == 2:					# Two Pairs
+			self.hands[4].append([hand, value])
+		elif amount[1] == 1:					# Pair
+			self.hands[5].append([hand, value])
+		else:									# Highest card
+			self.hands[6].append([hand, value])
+
 	# Part 1, looping through the races and when it is enough, total time minus 2 time "not enough"
-	def function(self, part):
+	def part1(self):
 		for hand, value in self.lines:
 			counter = Counter(hand)
-			jokers = 0
-			if part == 2:
-				jokers = counter['m'] # search for jokers
-			counter['m'] = 0
-			if any(count == 5 for count in counter.values()) or (jokers > 0 and any(count == 5 - jokers for count in counter.values())): # Five of a Kind
-				print("add five", hand, value)
-				self.hands[0].append([hand, value])
-			elif any(count == 4 for count in counter.values()) or (jokers > 0 and any(count == 4 - jokers for count in counter.values())): # Four of a Kind
-				print("add four", hand, value)
-				self.hands[1].append([hand, value])
-			else:
-				found_3 = any(key for key, count in counter.items() if count == 3)
-				found_2 = any(key for key, count in counter.items() if count == 2)
-				if found_3 and found_2:
-					print("add full", hand, value)
-					self.hands[2].append([hand, value])
-				elif found_3 or (jokers > 0 and found_2):
-					print("add three", hand, value)
-					self.hands[3].append([hand, value])
-				elif found_2:
-					amountPairs = 0
-					for key, count in counter.items():
-						if count == 2:
-							amountPairs += 1
-					print("amount pairs", amountPairs)
-					if amountPairs == 2 and jokers > 0:
-						self.hands[2].append([hand, value])
-						print("add full", hand, value)
-					elif amountPairs == 2 or (jokers > 0):
-						self.hands[4].append([hand, value])
-						print("add 2 pairs", hand, value)
-					else:
-						self.hands[5].append([hand, value])
-						print("add pair", hand, value)
-				else:
-					if jokers == 1:
-						print("add pair", hand, value)
-						self.hands[5].append([hand, value])
-					elif jokers == 2:
-						self.hands[3].append([hand, value])
-						print("add three", hand, value)
-					else:
-						print("add lonley", hand, value)
-						self.hands[6].append([hand, value])
+			amount = [0,0,0,0,0]
+			for count in counter.values():
+				amount[count - 1] += 1
+			self.addingHands(amount, hand, value)
 		return (self.calculateHands())
-		
+
+	# adding the jokers to the highest handcombi, except for the full house case
+	def addJokerValues(self, hand):
+		counter = Counter(hand)
+		amount = [0,0,0,0,0]
+		jokers = counter['m']
+		counter['m'] = 0
+		for count in counter.values():
+			if count != 0:
+				amount[count - 1] += 1
+		if jokers == 0:
+			return amount
+		if jokers == 5:
+			amount[4] = 1
+		elif amount[1] == 2: # full house (special)
+			amount[1] -= 1
+			amount[2] += 1
+		else:
+			index = max((i for i, num in enumerate(amount) if num > 0), default=-1)
+			amount[index + jokers] = 1
+			amount[index] -= 1
+		return (amount)
 
 	# Part 2
-	def function2(self):
-		print("part2")
+	def part2(self):
+		# reset hands from part 1
+		self.hands = [[] for _ in range(7)]
+		for hand, value in self.lines:
+			amount = self.addJokerValues(hand)
+			self.addingHands(amount, hand, value)
+		return (self.calculateHands())
 
 def main():
 	f = open("input.txt", "r")
 	input = f.read()
 
-	sol = Solution(input)
-	# print("Part1:", sol.function(1))
-	print("Part2:", sol.function(2), 250665248)
+	sol = Solution(input, 1)
+	print("Part1:", sol.part1())
+	sol2 = Solution(input, 2)
+	print("Part2:", sol2.part2())
 	f.close() 
 
 if __name__ == "__main__":
