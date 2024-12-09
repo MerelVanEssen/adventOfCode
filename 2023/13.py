@@ -3,15 +3,7 @@ from math import gcd
 from functools import reduce
 import re
 from collections import Counter
-from icecream import ic # source myenv/bin/activate
-
-def turnMap(map):
-	# turn map 90 degrees
-	newMap = ["" for _ in range(len(map[0]))]
-	for line in map:
-		for i, char in enumerate(line):
-			newMap[i] = newMap[i] + char
-	return newMap   
+from aoc import turnMap
 
 def checkOneDifference(list1, list2):
 	differences = [

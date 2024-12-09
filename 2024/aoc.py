@@ -1,6 +1,15 @@
 # aoc.py
 
 
+
+def countSymbolInMap(map, symbol):
+	total = 0
+	for line in map:
+		total += line.count(symbol)
+	return total
+
+### TURNING MAPS ###
+
 # Turn map 90 degrees forwards
 def turnMap(map):
 	newMap = ["" for _ in range(len(map[0]))]

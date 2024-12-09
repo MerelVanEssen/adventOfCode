@@ -3,23 +3,12 @@ from math import gcd
 from functools import reduce
 import re
 from aoc import turnMapBackwardsList
-# self.hands = [[] for _ in range(7)]
-# inte = [int(x) for x in line]
-# newMap = [[] for _ in range(len(map[0]))]
 
 class Solution:
 	def __init__(self, input):
 		self.map = input.split('\n')
 		for i in range(len(self.map)):
 			self.map[i] = [x for x in self.map[i]]
-	
-	# turn map 90 degrees backwards
-	# def turnMap(self, map):
-	# 	newMap = [[] for _ in range(len(map[0]))]
-	# 	for line in map:
-	# 		for i, char in enumerate(line):
-	# 			newMap[i].insert(0, char)
-	# 	return newMap
 
 	def moveField(self):
 		saveShapeRocks = [0 for x in self.map[0]]
