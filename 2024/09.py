@@ -76,8 +76,6 @@ class Solution:
 				curr = self.fileBlock.pop(0)
 			rest = False
 			# print("curr", curr)
-			if curr == 0:
-				break
 			if curr[0] == 0: # file
 				newResult += curr[2]
 				# print("found file")
@@ -155,3 +153,5 @@ if __name__ == "__main__":
 
 	# 6382582218784 6393172435435
 	# 6409919630033
+
+	# 6380541116431 too low
