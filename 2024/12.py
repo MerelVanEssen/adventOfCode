@@ -1,8 +1,7 @@
 import re
-from collections import deque
+from collections import deque, Counter, defaultdict
 from math import gcd
 from functools import reduce
-from collections import Counter
 from aoc import turnMapBackwardsList
 
 # self.hands = [[] for _ in range(7)]

@@ -66,54 +66,53 @@ class Solution:
 			total += t
 		return total
 
-	def herschik2(self, result, change):
-		newFileBlock = []
+	def combinesSpaces(self):
+		i = 0
+		newBlock = []
+		while i < len(self.fileBlock) :
+			if i < len(self.fileBlock) - 1 and self.fileBlock[i][0] == 1 and self.fileBlock[i + 1][0] == 1:
+				self.fileBlock[i + 1][1] += self.fileBlock[i][1]
+			else:
+				if self.fileBlock[i][0] == 1:
+					self.fileBlock[i][2] = ['.'] * self.fileBlock[i][1]
+				newBlock.append(self.fileBlock[i])
+			i += 1
+		self.fileBlock = newBlock
+
+	def herschik2(self, result):
+		# print(self.fileBlock)
 		newResult = []
-		rest = False
-		while self.fileBlock:
-			# print(newResult)
-			if rest == False:
-				curr = self.fileBlock.pop(0)
-			rest = False
-			# print("curr", curr)
-			if curr[0] == 0: # file
-				newResult += curr[2]
-				# print("found file")
-				newFileBlock.append(curr[:])
-				# print("1ADD curr[:]", curr)
+		j = 0
+		while j < len(self.fileBlock):
+			if self.fileBlock[j][0] == 0: # file
+				newResult += self.fileBlock[j][2]
+				j += 1
 			else: # space
-				space = curr[1]
+				print("search for", self.fileBlock[j])
+				space = self.fileBlock[j][1]
+				i = len(self.fileBlock) - 1
 				found = False
-				for i in range(len(self.fileBlock) - 1, 0, -1):
+				while i > j:
 					if self.fileBlock[i][0] == 0 and self.fileBlock[i][1] <= space:
-						# print("found move", self.fileBlock[i][0], space)
-						change = True
-						found = True
-						move = self.fileBlock[i][:]
+						print("block fits:", self.fileBlock[i])
+						newResult += self.fileBlock[i][2]
+						saveBlock = self.fileBlock[i][:]
 						self.fileBlock[i][0] = 1
-						self.fileBlock[i][2] = ["."] * self.fileBlock[i][1]
-						# print("2ADD move[:]", move)
-						newFileBlock.append(move[:])
-						if move[1] != space:
-							
-							curr[1] = space - move[1]
-							curr[2] = ["."] * curr[1]
-							curr[0] = 1
-							# self.fileBlock.insert(0, curr[:])
-							rest = True
-							# print("found with rest", rest)
-							nrs = move[2]
-							move[2] = nrs[:move[1]]
-							move[0] = 0
-						newResult += move[2]				
+						self.fileBlock[i][2] = ['.'] * self.fileBlock[i][1]
+						found = True
+						if self.fileBlock[i][1] == space: # fits exactly
+							j += 1
+						elif self.fileBlock[i][1] < space: #space left
+							self.fileBlock[j][1] = space - self.fileBlock[i][1]
+							self.fileBlock[j][2] = ['.'] * self.fileBlock[j][1]
 						break
-				if found == False:
-					newResult += curr[2]
-					newFileBlock.append(curr[:])
-					# print("3ADD curr", curr)
-		self.fileBlock = newFileBlock[:]
-		print(newResult)
-		return (change, newResult)
+					i -= 1
+				if not found:
+					newResult += self.fileBlock[0][2]
+					self.fileBlock.pop(0)
+			# print(self.fileBlock)
+		print("result", newResult)
+		return (newResult)
 			
 	def sumCounting2(self, result):
 		total = 0
@@ -128,13 +127,7 @@ class Solution:
 		total = 0
 		for line in self.map:
 			result = self.getSpace(line)
-			change = True
-			i = 0
-			while change and i < 5:
-				change = False
-				change, result = self.herschik2(result, change)
-				change = True
-				i += 1
+			result = self.herschik2(result)
 			total = self.sumCounting2(result)
 		return total
 
@@ -143,15 +136,7 @@ def main():
 
 	sol = Solution(input)
 	# print("Part 1:", sol.part1())
-	print("Part 2:", sol.part2())
+	print("Part 2:", sol.part2(), 6382582136592)
 
 if __name__ == "__main__":
 	main()
-
-	# 6353393526605
-	# 6353658456323
-
-	# 6382582218784 6393172435435
-	# 6409919630033
-
-	# 6380541116431 too low
