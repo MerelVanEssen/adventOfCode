@@ -36,15 +36,18 @@ class Solution:
 			newY = y + d[1]
 			self.searchArea(char, newX, newY)
 	
-	def checkCorner(self, char, x, y, i):
-		if (x < 0 or  i == 1) and (y < 0 or i == 3): #corner leftup
-			self.corner += 1
-		if (x < 0 or  i == 1) and (y >= len(self.map[0]) or i == 0): # corner right up
-			self.corner += 1
-		if (y < 0 or i == 2) and (x >= len(self.map) or i == 1): # corner left down
-			self.corner += 1
-		if ((x >= len(self.map) or i == 1) and ( y >= len(self.map[0]) or i == 0)) # corner right down
-			self.corner += 1
+	
+	# def checkCorner(self, char, x, y, char2):
+	# 	# inside
+	# 	if (x < 0 or  char != char2) and (y < 0 or char != char2): #corner leftup
+	# 		self.corner += 1
+	# 	if (x < 0 or  char != char2) and (y >= len(self.map[0]) or char != char2): # corner right up
+	# 		self.corner += 1
+	# 	if (y < 0 or char != char2) and (x >= len(self.map) or char != char2): # corner left down
+	# 		self.corner += 1
+	# 	if ((x >= len(self.map) or char != char2) and ( y >= len(self.map[0]) or char != char2)): # corner right down
+	# 		self.corner += 1
+	# 	# outside
 
 
 	def searchArea2(self, char, x, y, i):
