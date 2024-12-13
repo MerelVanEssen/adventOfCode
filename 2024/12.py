@@ -1,171 +1,107 @@
-import re
-from collections import deque, Counter, defaultdict
-from math import gcd
-from functools import reduce
-from aoc import turnMapBackwardsList
-
-# self.hands = [[] for _ in range(7)]
-# inte = [int(x) for x in line]
-# self.field = [['.' for _ in row] for row in self.map]
-
 class Solution:
 	def __init__(self, input):
 		self.map = input.split('\n')
-		self.grid = [[False for _ in range(len(self.map[0]))] for _ in range(len(self.map))]
+		self.grid = [[-1 for _ in range(len(self.map[0]))] for _ in range(len(self.map))]
 		self.dir = [[0,1], [1,0], [0,-1], [-1,0]]
-		self.amount = 0
-		self.border = 0
-		self.corner = 0
-		self.bordersX = set()
-		self.bordersY = set()
-		self.visited = set()
+		self.visit = set()
+		self.outsideVisited = set()
 
-	def searchArea(self, char, x, y):
-		if not (0 <= x < len(self.map) and 0 <= y < len(self.map[0])):
-			self.border += 1
-			return
-		if self.map[x][y] != char:
-			self.border += 1
-			return
-		if self.grid[x][y] == True:
-			return
-		self.grid[x][y] = True
-		self.amount += 1
-		for d in self.dir:
-			newX = x + d[0]
-			newY = y + d[1]
-			self.searchArea(char, newX, newY)
-	
-<<<<<<< HEAD
-	def checkCorner(self, char, x, y, i):
-		if (x < 0 or  i == 1) and (y < 0 or i == 3): #corner leftup
-			self.corner += 1
-		if (x < 0 or  i == 1) and (y >= len(self.map[0]) or i == 0): # corner right up
-			self.corner += 1
-		if (y < 0 or i == 2) and (x >= len(self.map) or i == 1): # corner left down
-			self.corner += 1
-		if ((x >= len(self.map) or i == 1) and ( y >= len(self.map[0]) or i == 0)) # corner right down
-			self.corner += 1
-=======
-	
-	# def checkCorner(self, char, x, y, char2):
-	# 	# inside
-	# 	if (x < 0 or  char != char2) and (y < 0 or char != char2): #corner leftup
-	# 		self.corner += 1
-	# 	if (x < 0 or  char != char2) and (y >= len(self.map[0]) or char != char2): # corner right up
-	# 		self.corner += 1
-	# 	if (y < 0 or char != char2) and (x >= len(self.map) or char != char2): # corner left down
-	# 		self.corner += 1
-	# 	if ((x >= len(self.map) or char != char2) and ( y >= len(self.map[0]) or char != char2)): # corner right down
-	# 		self.corner += 1
-	# 	# outside
->>>>>>> 3341e24b5a0eb3e6bef16cac71e4fba321059cd5
+	def checkCorners2(self, listSides, saveCor):
+		checks = [[0,1],[1,2],[2,3],[3,0]]
+		corner = 0
+		for check in checks:
+			if check[0] in listSides and check[1] in listSides:
+				# if a corner is double found it means that it is not a corner from outside but from the inside
+				if (saveCor[check[0]], saveCor[check[1]]) in self.outsideVisited:
+					corner -= 1
+				else:
+					self.outsideVisited.add((saveCor[check[0]], saveCor[check[1]]))
+					self.outsideVisited.add((saveCor[check[1]], saveCor[check[0]]))
+					corner += 1
+		return corner
 
+	def checkCorners1(self, listSides):
+		checks = [[0,1],[1,2], [2,3],[3,0]]
+		corner = 0
+		for check in checks:
+			if check[0] in listSides and check[1] in listSides:
+				corner += 1
+		return corner
 
-	def searchArea2(self, char, x, y, i):
-		returnNow = False
-		if x < 0 or x >= len(self.map):
-			# print("add x", x, y)
-			if i == 3:
-				self.bordersX.add((x + 1, y))
-			else:
-				self.bordersX.add((x, y))
-			returnNow = True
-		if y < 0 or y >= len(self.map[0]):
-			if i == 2:
-				self.bordersY.add((y + 1, x))
-			else:
-				self.bordersY.add((y, x))
-			# print("add y", y, x)
-			returnNow = True
-		if returnNow == True:
-			self.border += 1
-			return False
-		if self.map[x][y] != char:
-			if i == 3:
-				self.bordersX.add((x + 1, y))
-			elif i == 1:
-				self.bordersX.add((x, y))
-			elif i == 2:
-				self.bordersY.add((y + 1, x))
-			else:
-				self.bordersY.add((y, x))
-			self.border += 1
-			return True
-		if self.grid[x][y] == True:
-			return False
-		self.grid[x][y] = True
-		self.amount += 1
-		for i, d in enumerate(self.dir):
-			newX = x + d[0]
-			newY = y + d[1]
-			self.searchArea2(char, newX, newY, i)
-		return False
-
-	def countSides(self, nrs, lines):
+	def checkCornersFromOutside(self, index, outside):
 		total = 0
-		uniqueNrs = {}
-		nrs = list(nrs)
-		print(nrs)
-		for x, y in nrs:
-			if x not in uniqueNrs:
-				uniqueNrs[x] = [y]
-			else:
-				value = uniqueNrs[x]
-				value.append(y)
-				uniqueNrs[x] = value
-		print("u", uniqueNrs)
-		for nrs in uniqueNrs:
-			saveNrs = nrs
-			nrs = uniqueNrs[nrs]
-			nrs.sort()
-			prev = nrs[0]
-			firstNr = nrs[0]
-			for nr in nrs:
-				if nr != prev + 1:
-					lines.append([saveNrs, firstNr, prev])
-					firstNr = nr
-					total += 1
-				prev = nr
-		print("lines", lines)
-		return(total)
-
-	def part1(self):
-		total = 0
-		total2 = 0
-		saveChar = self.map[0][0]
-		for x, line in enumerate(self.map):
-			for y, char in enumerate(line):
-				if self.grid[x][y] == False:
-					self.searchArea2(char, x, y, 0)
-					# print("Letter", char)
-					total += self.amount * self.border
-
-					part2 = (self.amount * self.countSides(self.bordersX, []))
-					print("part2 A" , part2, part2 // self.amount)
-					total2 += part2
-					part2 = (self.amount * self.countSides(self.bordersY, []))
-					print("part2 B" , part2, part2 // self.amount)
-					total2 += part2
-
-					self.bordersX.clear()
-					self.bordersY.clear()
-					self.amount = 0
-					self.border = 0
-		return total, total2
-
-	def part2(self):
-		total = 0
-
+		outside = list(outside)
+		wrongCornersOutside = []
+		
+		for y, x in outside:
+			wrongCornersOutside.clear()
+			saveCor = []
+			for i, d in enumerate(self.dir):
+				newY = y + d[0]
+				newX = x + d[1]
+				saveCor.append((newY, newX))
+				if 0 <= newY < len(self.map) and 0 <= newX < len(self.map[0]) and self.grid[newY][newX] == index:
+					wrongCornersOutside.append(i)
+			total += self.checkCorners2(wrongCornersOutside, saveCor)
 		return total
 
+	def floating(self, index, char, y, x):
+		deq = [(y, x)]
+		self.grid[y][x] = index
+		self.visit.add((y, x))
+		amount = 1
+		border = 0
+		corner = 0
+		outside = set()
+
+		while deq:
+			curr = deq.pop(0)
+			wrongCornerInside = []
+			for i, d in enumerate(self.dir):
+				newY = d[0] + curr[0] 
+				newX = d[1] + curr[1]
+				insideMap = False
+
+				if 0 <= newY < len(self.map) and 0 <= newX < len(self.map[0]):
+					insideMap = True
+				setNew = (newY, newX)
+
+				if insideMap and self.map[newY][newX] == char and setNew not in self.visit:
+					amount += 1
+					self.grid[newY][newX] = index
+					deq.append(setNew)
+					self.visit.add(setNew)
+				else:
+					if not (insideMap and self.map[newY][newX] == char):
+						border += 1
+						wrongCornerInside.append(i)
+					if insideMap and self.map[newY][newX] != char:
+						outside.add((newY,newX))
+			corner += self.checkCorners1(wrongCornerInside)
+
+		corner += self.checkCornersFromOutside(index, outside)
+		return amount, border, corner
+
+	def part(self):
+		index = 0
+		corners = 0
+		borders = 0
+		for y in range(len(self.map)):
+			for x in range(len(self.map[0])):
+				char = self.map[y][x]
+				self.outsideVisited.clear()
+				if (y,x) not in self.visit:
+					amount, border, corner = self.floating(index, char, y, x)
+					corners += amount * corner
+					borders += amount * border
+					index += 1
+		return borders, corners
+
 def main():
-	# CHANGE INPUTFILE
 	input = open("input/12.txt", "r").read()
 
 	sol = Solution(input)
-	print("Part 1:", sol.part1(), 1546338, 978590)
-	print("Part 2:", sol.part2())
+	print("Part 1:", sol.part())
 
 if __name__ == "__main__":
 	main()
