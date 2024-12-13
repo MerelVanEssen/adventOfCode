@@ -16,7 +16,8 @@ class Solution:
 		self.lY = len(self.map[0])
 		self.dir = [[0,1], [1,0], [0,-1], [-1,0]]
 		self.contraDir = [2,3,0,1]
-		self.grid = [[float('inf') for _ in range(self.lY)] for _ in range(self.lX)]
+		self.grid = [[[float('inf'), 1, -1] for _ in range(self.lY)] for _ in range(self.lX)]
+		self.grid2 = [[[float('inf'), 1, -1] for _ in range(self.lY)] for _ in range(self.lX)]
 		self.minHeatLoss = float('inf')
 
 	def recursive(self, x, y, heatLoss, straight, lastDir):
@@ -45,13 +46,43 @@ class Solution:
 					self.recursive(newX, newY, newHeatLoss, straight + 1, i)
 				else:
 					self.recursive(newX, newY, newHeatLoss, 1, i)
-			
+
+	def dfs(self):
+		deq = []
+		deq.append((0,0,0,1,-1))
+		while deq:
+			y, x, cost, straight, lastDir = deq.pop(0)
+			for i, d in enumerate(self.dir):
+				newY = d[0] + y
+				newX = d[1] + x
+				if 0 <= newY < len(self.map) and 0 <= newX < len(self.map[0]):
+					newCost = cost + int(self.map[newY][newX])
+					newStraight = 1
+					if i == lastDir:
+						newStraight = straight + 1
+					if newStraight > 4:
+						continue
+					if newCost < self.grid2[newY][newX][0]:
+						newI = i
+						if self.grid2[newY][newX][2] != -1:
+							newStraight = self.grid2[newY][newX][1]
+							newI = self.grid2[newY][newX][2]
+						deq.append((newY, newX, newCost, newStraight, newI))
+						self.grid2[newY][newX][0] = newCost
+						self.grid2[newY][newX][1] = newStraight
+						self.grid2[newY][newX][2] = i
+		for line in self.grid2:
+			print(line)
+		return(self.grid2[len(self.map) - 1][len(self.map[0]) - 1])
+
+
+
 	def part1(self):
 		total = 0
-		self.recursive(0,0,0,0,-1)
-		for line in self.grid:
-			print(line)
-		return self.minHeatLoss
+		# self.recursive(0,0,0,0,-1)
+		return self.dfs()
+		
+		# return self.minHeatLoss
 
 	def part2(self):
 		total = 0
