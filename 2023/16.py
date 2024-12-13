@@ -30,37 +30,28 @@ class Solution:
 		return [dir]
 
 	@cache
-	def mirrorSlash(self, mirror, dir):
-		if mirror == '\\':
+	def mirror(self, mirror, dir):
+		if mirror == '.':
+			return [dir]
+		elif mirror == '\\':
 			if dir == 0 or dir == 2:
 				dir -= 1
 			else:
 				dir += 1
-		else:
+		elif mirror == '/':
 			if dir == 0 or dir == 2:
 				dir += 1
 			else:
 				dir -= 1
+		elif mirror == '|' and (dir == 0 or dir == 2):
+			return [1, 3]
+		elif mirror == '-' and dir != 0 and dir != 2:
+			return [0, 2]
 		return self.correctDir(dir)
-
-	@cache
-	def mirrorMin(self, mirror, dir):
-		if mirror == '|':
-			if dir == 0 or dir == 2:
-				return [1, 3]
-			return self.correctDir(dir)
-		else:
-			if dir == 0 or dir == 2:
-				return self.correctDir(dir)
-			else:
-				return [0, 2]
 	
 	def checkMirror(self, mirror, dir):
-		if mirror == '.':
-			return([dir])
-		elif mirror == '/' or mirror == '\\':
-			return(self.mirrorSlash(mirror, dir))
-		return(self.mirrorMin(mirror, dir))
+		
+		return(self.mirror(mirror, dir))
 
 	def followBeam(self, x, y, dir, depth):
 		if (x, y, dir) in self.visit or depth == 990:
@@ -75,6 +66,13 @@ class Solution:
 			for d in dir:
 				self.followBeam(x + self.dir[d][0], y + self.dir[d][1], d, depth + 1)
 		return
+	
+	def followBeam2(self, items):
+		while items:
+			x, y, dir, setList = items.pop(0)
+			
+
+
 
 
 	def part1(self):
@@ -89,6 +87,7 @@ class Solution:
 			self.visit.clear()
 			self.energized.clear()
 			self.followBeam(0, i, 3, 0)
+			self.followBeam2([0, i, 3, set()])
 			self.maxEnergized = max(self.maxEnergized, len(self.energized))
 			# print(0, i, self.maxEnergized)
 
