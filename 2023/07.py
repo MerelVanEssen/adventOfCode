@@ -1,5 +1,4 @@
 from collections import Counter
-from icecream import ic # source myenv/bin/activate
 
 class Solution:
 	# set with values time and distance and for part two one number

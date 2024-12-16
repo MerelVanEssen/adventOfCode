@@ -2,7 +2,6 @@ from collections import deque
 from math import gcd
 from functools import reduce
 import re
-from icecream import ic # source myenv/bin/activate
 
 class Solution:
 	def __init__(self, input):

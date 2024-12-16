@@ -1,7 +1,6 @@
 from collections import deque
 import re
 from collections import Counter
-from icecream import ic # source myenv/bin/activate
 
 UP = [-1,0]
 DOWN = [1,0]

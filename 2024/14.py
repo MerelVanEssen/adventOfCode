@@ -1,5 +1,5 @@
 import re
-import functools
+from functools import cache
 
 class Solution:
 	def __init__(self, input, x, y):
@@ -94,7 +94,7 @@ class Solution:
 		return saveTimes
 
 def main():
-	input = open("input.txt", "r").read()
+	input = open("input/14.txt", "r").read()
 
 	sol = Solution(input, 101, 103)
 	print("Part 1:", sol.part1())

@@ -2,13 +2,8 @@ from collections import deque
 from math import gcd
 from functools import reduce
 import re
-from icecream import ic # source myenv/bin/activate
 import sys
 
-
-# self.hands = [[] for _ in range(7)]
-# inte = [int(x) for x in line]
-# self.field = [['.' for _ in row] for row in self.map]
 
 class Solution:
 	def __init__(self, input):

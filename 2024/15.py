@@ -23,7 +23,7 @@ class Solution:
 					line.append('#')
 				elif self.field[i][j] == '@':
 					self.field[i][j] = '.'
-					self.start1 = [i, len(line) / 2]
+					self.start1 = [i, len(line) // 2]
 					self.start2 = [i, len(line)]
 					line.append('.')
 					line.append('.')
@@ -132,7 +132,7 @@ class Solution:
 		return self.calculateSum()
 
 def main():
-	input = open("input.txt", "r").read()
+	input = open("input/15.txt", "r").read()
 
 	sol = Solution(input)
 	print("Part 1:", sol.part(1))
