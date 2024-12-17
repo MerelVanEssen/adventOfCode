@@ -4,6 +4,8 @@ from math import gcd
 from functools import reduce
 from collections import Counter
 from aoc import turnMapBackwardsList
+import heapq
+from functools import cache
 
 # self.hands = [[] for _ in range(7)]
 # inte = [int(x) for x in line]
