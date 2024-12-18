@@ -1,0 +1,20 @@
+1	finding value/string in string
+2	calculate possibilities game
+3	search in map for operators
+4	card game
+5	convert seeds in buckets
+6	distance / time
+7	full house game
+8	follow the right value
+9	calculate the next values in piramid
+10	map with pipes
+11	galaxies distance
+12	possibilities with filling line
+13	find mirror in map	
+14	turn map with rolling stones and find pattern
+15	hash algoritm
+16	map with pipes that give direction
+17	dijkstra for shortest way with lowest heatloss
+18	shoelace formula and pick's theorem to calculate surface
+19
+20
