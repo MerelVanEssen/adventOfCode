@@ -22,7 +22,6 @@ class Solution:
 		visited = set()
 		deq = []
 		heapq.heappush(deq, (0, 0, 0, 1, 0, 0)) # cost, y, x, steps, dirY, dirX
-		self.grid[0][0] = 0
 
 		while deq:
 			cost, y, x, s, dy, dx = heapq.heappop(deq)
@@ -56,19 +55,21 @@ class Solution:
 	def dijkstra2(self):
 		visited = set()
 		deq = []
-		heapq.heappush(deq, (0, 0, 0, 1, 0, 0)) # cost, y, x, steps, dirY, dirX
-		self.grid[0][0] = 0
+		heapq.heappush(deq, (0, 0, 0, 1, 0, 1)) # cost, y, x, steps, dirY, dirX
+		heapq.heappush(deq, (0, 0, 0, 1, 1, 0))
 
 		while deq:
 			cost, y, x, s, dy, dx = heapq.heappop(deq)
 
-			if s == 10:
+			if s == 9:
 				continue
 
 			if (y, x, dy, dx, s) in visited:
 				continue
 			visited.add((y, x, dy, dx, s))
-			
+			if cost < self.grid[y][x]:
+				self.grid[y][x] = cost
+
 			if y == self.lY - 1  and x == self.lX - 1:
 				return cost
 			
@@ -77,15 +78,12 @@ class Solution:
 				if ndy == -dy and ndx == -dx:
 					continue
 
-				newY = y + (ndy * 4)
-				newX = x + (ndx * 4)
+				newY = y + ndy
+				newX = x + ndx
 
 				if 0 <= newY < self.lY and 0 <= newX < self.lX:
-					newCost1 = cost + int(self.map[newY][newX])
-					newCost4 = cost
-					for i in range(1, 5, 1):
-						newCost4 += int(self.map[y + (ndy * i)][x + (ndx * i)])
-	
+					newCost = cost + int(self.map[newY][newX])
+
 					if [dy,dx] == [ndy,ndx]:
 						heapq.heappush(deq, (newCost, newY, newX, s + 1, ndy, ndx))
 					elif s > 3:
@@ -97,17 +95,20 @@ class Solution:
 		return self.dijkstra()
 
 	def part2(self):
-		total = 0
-
-		return self.dijkstra2()
+		total = self.dijkstra2()
+		for line in self.grid:
+			print(line)
+		return total
 
 def main():
 	# CHANGE INPUTFILE
 	input = open("input/17.txt", "r").read()
 
 	sol = Solution(input)
-	print("Part 1:", sol.part1(), 936)
+	print("Part 1:", sol.part1())
 	print("Part 2:", sol.part2())
 
 if __name__ == "__main__":
 	main()
+
+# 1181 too high
