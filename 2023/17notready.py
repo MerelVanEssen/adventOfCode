@@ -13,68 +13,93 @@ import heapq
 class Solution:
 	def __init__(self, input):
 		self.map = input.split('\n')
-		self.lX = len(self.map)
-		self.lY = len(self.map[0])
+		self.lY = len(self.map)
+		self.lX = len(self.map[0])
 		self.dir = [[0,1], [1,0], [0,-1], [-1,0]]
-		self.contraDir = [2,3,0,1]
-		self.grid = [[float('inf') for _ in range(self.lY)] for _ in range(self.lX)]
+		self.grid = [[float('inf') for _ in range(self.lX)] for _ in range(self.lY)]
 
 	def dijkstra(self):
 		visited = set()
 		deq = []
-		heapq.heappush(deq, (0, 0, 0, 1, 0)) # cost, y, x, steps, dir left
-		heapq.heappush(deq, (0, 0, 0, 1, 1)) # cost, y, x, steps, dir down
+		heapq.heappush(deq, (0, 0, 0, 1, 0, 0)) # cost, y, x, steps, dirY, dirX
 		self.grid[0][0] = 0
 
 		while deq:
-			cost, y, x, straigth, direction = heapq.heappop(deq)
+			cost, y, x, s, dy, dx = heapq.heappop(deq)
 
-			if (y, x, direction) in visited:
+			if s == 4:
 				continue
 
-			for i, d in enumerate(self.dir):
-
-				newCost = cost
-				newY = y + d[1]
-				newX = x + d[0]
-
-				if not (0 <= newY < len(self.map) and 0 <= newX < len(self.map[0])):
+			if (y, x, dy, dx, s) in visited:
+				continue
+			visited.add((y, x, dy, dx, s))
+			
+			if y == self.lY - 1  and x == self.lX - 1:
+				return cost
+			
+			for ndy, ndx in self.dir:
+				if ndy == -dy and ndx == -dx:
 					continue
 
-				if direction == i and straigth == 3:
+				newY = y + ndy
+				newX = x + ndx
+
+				if 0 <= newY < self.lY and 0 <= newX < self.lX:
+					newCost = cost + int(self.map[newY][newX])
+
+					if [dy,dx] == [ndy,ndx]:
+						heapq.heappush(deq, (newCost, newY, newX, s + 1, ndy, ndx))
+					else:
+						heapq.heappush(deq, (newCost, newY, newX, 1, ndy, ndx))
+		return 0
+
+	def dijkstra2(self):
+		visited = set()
+		deq = []
+		heapq.heappush(deq, (0, 0, 0, 1, 0, 0)) # cost, y, x, steps, dirY, dirX
+		self.grid[0][0] = 0
+
+		while deq:
+			cost, y, x, s, dy, dx = heapq.heappop(deq)
+
+			if s == 10:
+				continue
+
+			if (y, x, dy, dx, s) in visited:
+				continue
+			visited.add((y, x, dy, dx, s))
+			
+			if y == self.lY - 1  and x == self.lX - 1:
+				return cost
+			
+			for ndy, ndx in self.dir:
+				
+				if ndy == -dy and ndx == -dx:
 					continue
 
-				newCost = cost + int(self.map[newY][newX])
+				newY = y + (ndy * 4)
+				newX = x + (ndx * 4)
 
-				if y == len(self.map) - 1 and x == len(self.map[0]) - 1:
-					return (newCost)
-
-				if straigth == 4:
-					straigth = 1
-				else:
-					straigth += 1
-
-				if newCost < self.grid[newY][newX]:
-					self.grid[newY][newX] = newCost
-
-				heapq.heappush(deq, (newCost, newY, newX, straigth, i))
-
-			visited.add((y, x, direction))
-
-		return self.grid[len(self.map) - 1][len(self.map[0]) - 1]
+				if 0 <= newY < self.lY and 0 <= newX < self.lX:
+					newCost1 = cost + int(self.map[newY][newX])
+					newCost4 = cost
+					for i in range(1, 5, 1):
+						newCost4 += int(self.map[y + (ndy * i)][x + (ndx * i)])
+	
+					if [dy,dx] == [ndy,ndx]:
+						heapq.heappush(deq, (newCost, newY, newX, s + 1, ndy, ndx))
+					elif s > 3:
+						heapq.heappush(deq, (newCost, newY, newX, 1, ndy, ndx))
+		return 0
 					
 
 	def part1(self):
-		total = self.dijkstra()
-
-		for line in self.grid:
-			print(line)
-		return total
+		return self.dijkstra()
 
 	def part2(self):
 		total = 0
 
-		return total
+		return self.dijkstra2()
 
 def main():
 	# CHANGE INPUTFILE
