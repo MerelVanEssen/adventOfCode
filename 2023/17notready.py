@@ -106,7 +106,7 @@ def main():
 	input = open("input/17.txt", "r").read()
 
 	sol = Solution(input)
-	print("Part 1:", sol.part1())
+	print("Part 1:", sol.part1(), 936)
 	print("Part 2:", sol.part2())
 
 if __name__ == "__main__":
