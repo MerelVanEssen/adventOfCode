@@ -1,0 +1,20 @@
+1	with defaultdict
+2	
+3	do or don't, sum in string
+4	search for XMAS
+5	book pages
+6	map with obstacles, search loops
+7	calculate with sums
+8	
+9	
+10	
+11	
+12	
+13	
+14	
+15	
+16	
+17	
+18	
+19	
+20	

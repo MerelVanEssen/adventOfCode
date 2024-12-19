@@ -1,9 +1,3 @@
-import re
-from collections import deque
-from math import gcd
-from functools import reduce
-from collections import Counter
-
 class Solution:
 	def __init__(self, input):
 		self.map = input.split('\n')
