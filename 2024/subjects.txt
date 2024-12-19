@@ -15,6 +15,6 @@
 15	
 16	
 17	
-18	
-19	
+18	dijkstra to search shortest way
+19	finding possibilities in string, recursive
 20	

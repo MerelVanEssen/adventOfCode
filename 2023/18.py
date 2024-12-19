@@ -6,12 +6,6 @@ from collections import Counter
 from aoc import turnMapBackwardsList
 import heapq
 
-# self.hands = [[] for _ in range(7)]
-# inte = [int(x) for x in line]
-# self.field = [['.' for _ in row] for row in self.map]
-
-# four corners UL UR DL DR
-
 class Solution:
 	def __init__(self, input):
 		pattern = r"([A-Z]) (\d+) \(#(.*)\)"
