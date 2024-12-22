@@ -15,75 +15,86 @@ class Solution:
 	def __init__(self, input):
 		patternRatings = r"\{x=(\d+),m=(\d+),a=(\d+),s=(\d+)\}"
 		patternWorkflow = r"(\w+)\{([^}]*)\}"
+		pattern = r"([\w])([< | >])(\d+):(\w+)"
 		workflows, ratings = input.split('\n\n')
 		
 		self.ratings = re.findall(patternRatings, ratings)
 		workflows = re.findall(patternWorkflow, workflows)
 		self.workflows = {}
-		for i, flow in enumerate(workflows):
-			self.workflows[flow[0]] = flow[1].split(',')
 
-	def	checkStatement(self, rating, group, operator, value):
+		self.groups = [[0],[0],[0],[0]]
+		convert = {'x': 0, 'm': 1, 'a': 2, 's': 3}
+
+		for i, flow in enumerate(workflows):
+			splitsFlow = flow[1].split(',')
+			for i in range(len(splitsFlow)):
+				if ':' in splitsFlow[i]:
+					splitsFlow[i] = re.findall(pattern, splitsFlow[i])
+					nr = int(splitsFlow[i][0][2])
+					self.groups[convert[splitsFlow[i][0][0]]].append(nr)
+					self.groups[convert[splitsFlow[i][0][0]]].append(nr - 1)
+					self.groups[convert[splitsFlow[i][0][0]]].append(nr + 1)
+				else:
+					splitsFlow[i] = (splitsFlow[i])
+			self.workflows[flow[0]] = splitsFlow
+		
+
+	@cache
+	def	checkStatement(self, group, operator, value, rating):
 		convert = {"x": 0, "m": 1, "a": 2, "s": 3}
 
 		nr = rating[convert[group]]
 		if operator == '<':
-			if nr < value:
+			if int(nr) < int(value):
 				return True
 		else:
-			if nr > match[0][2]:
+			if int(nr) > int(value):
 				return True
 		return False
 
-				# if length == 1 and nextStatement == False:
-				# 	if label == "A":
-				# 		accept += sum(rating)
-				# 		breakout = True
-				# 	elif label == 'R':
-				# 		breakout = True
-				# 	else:
-				# 		label = f[0]
-
-	def process(self, rating):
-		pattern3 = r"([\w])([< | >])(\d+):(\w+)"
-		flow = self.workflows["in"]
-		found = True
+	def rate(self, rating):
 		label = "in"
-		accept = 0
-		for rating in self.ratings:
+		while True:
+			if label == 'A':
+				return (True)
+			if label == 'R':
+				return (False)
 			
 			flow = self.workflows[label]
-			match = re.findall(pattern3, flow)
-			if len(match) == 0:
-				0
-			for i, m in enumerate(match):
-				group, operator, value, nextLabel = match[0]
-					if self.checkStatement(rating, group, operator, value):
-						label = nextLabel
-						found = True
-						break
-
-					
-		
-
+			for statement in flow:	
+				if isinstance(statement, str):
+					label = statement
+					break
+				g, o, v, l = statement[0]
+				if self.checkStatement(g, o, v, tuple(rating)):
+					label = l
+					break
 
 	def part1(self):
 		total = 0
 		for rating in self.ratings:
-			self.process(rating)
+			rating = list(map(int, rating))
+			if self.rate(rating):
+				total += sum(rating)
 		return total
 
 	def part2(self):
 		total = 0
-
+		for y in range(1, 4001):
+			for x in range(1, 4001):
+				for z in range(1, 4001):
+					for a in range(1, 4001):
+						rating = [y, x, z, a]
+						if self.rate(rating):
+							total += sum(rating)
 		return total
 
 def main():
 	input = open("input/19.txt", "r").read()
 
 	sol = Solution(input)
-	print("Part 1:", sol.part1())
-	print("Part 2:", sol.part2())
+	print("Part 1:", sol.part1(), 397134)
+	print("Part 2:", sol.part2(), 127517902575337)
 
 if __name__ == "__main__":
 	main()

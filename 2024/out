@@ -1,0 +1,14 @@
+<v<A>>^AA<vA<A>>^AAvAA<^A>A<vA>^A<A>A<vA>^A<A>A<v<A>A>^AAvA<^A>A
+<AAv<AA>>^AvA^AvA^A<vAA>^A
+^^<<A>A>AvvA
+code 456A
+None
+456A
+l1: deque(['<^^<A>A>AvvA', '^<<^A>A>AvvA', '^^<<A>A>AvvA'])
+['v<<A>^AAv<A>>^AvA^AvA^A<vAA>^A', 'v<<A>^AAv<A>>^AvA^AvA^A<vAA^>A', 'v<<A>^AAv<A>>^AvA^AvA^Av<AA>^A', 
+ 'v<<A>^AAv<A>>^AvA^AvA^Av<AA^>A', '<Av<AA>^A>AvA^AvA^A<vAA>^A', '<Av<AA>^A>AvA^AvA^A<vAA^>A',
+ '<Av<AA>^A>AvA^AvA^Av<AA>^A', '<Av<AA>^A>AvA^AvA^Av<AA^>A', '<AAv<AA>>^AvA^AvA^A<vAA>^A', 
+ '<AAv<AA>>^AvA^AvA^A<vAA^>A', '<AAv<AA>>^AvA^AvA^Av<AA>^A', '<AAv<AA>>^AvA^AvA^Av<AA^>A']
+456 1
+Part 1: 456 126384 137870
+Part 2: 0 170279148659464
