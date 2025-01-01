@@ -1,3 +1,5 @@
+from collections import deque
+
 class Block:
 	def __init__(self, input, nr):
 		self.blockNr = str(nr)
@@ -25,6 +27,7 @@ for i, item in enumerate(rawinput):
 	blocks.append(Block(item, i))
 	
 blocks.sort(key=lambda b: b.z1)
+
 
 for i, block in enumerate(blocks):
 	floor = 1
@@ -58,25 +61,19 @@ for block in blocks:
 
 print("Part 1:", total1)
 
-
-def recursive(block):
-	print("len support block", len(block.support))
-	if len(block.support) == 0:
-		return 0
-	
-	amount = 0
-	for supportBlock in block.support:
-		if len(supportBlock.supported) == 1:
-			amount += recursive(supportBlock) + 1
-	
-	return amount
-
 total2 = 0
-for block in notMove:
-	amount = recursive(block)
-	print(amount)
-	total2 += amount
+
+for block in blocks:
+	q = deque([block])
+	fallen = set()
+	while q:
+		b = q.popleft()
+		if b in fallen:
+			continue
+		fallen.add(b)
+		for subblock in b.support:
+			if subblock.supported.issubset(fallen):
+				q.append(subblock)
+	total2 += len(fallen) - 1
 
 print("Part 2:", total2)
-
-# too high 84228

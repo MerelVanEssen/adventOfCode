@@ -17,4 +17,4 @@
 17	dijkstra for shortest way with lowest heatloss
 18	shoelace formula and pick's theorem to calculate surface
 19
-20
+20	use lcm to find the point where all the signals are high
