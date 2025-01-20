@@ -39,7 +39,7 @@ class Solution:
 def main():
 	sol = Solution()
 	with open("input/02.txt", "r") as f:
-	input = f.read()
+		input = f.read()
 	print(sol.part1and2(input))
 
 if __name__ == "__main__":
