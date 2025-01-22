@@ -78,3 +78,4 @@ for folder in all:
 print("Part 1:", total, 1297683)
 
 # 813094 too low
+  1023738
