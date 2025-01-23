@@ -45,3 +45,12 @@ print("Part 2:", folder_size)
 
 
 
+<<<<<<< HEAD
+=======
+
+
+print("Part 1:", total, 1297683)
+
+# 813094 too low
+  1023738
+>>>>>>> origin/main
