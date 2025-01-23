@@ -3,6 +3,7 @@ emptyAOC.py
 
 /myenv
 /__pychache__
+/input
 .txt
 .session
 .sh
