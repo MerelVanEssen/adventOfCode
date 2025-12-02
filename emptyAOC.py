@@ -15,12 +15,12 @@ from itertools import permutations
 # inte = [int(x) for x in line]
 # self.field = [['.' for _ in row] for row in self.map]
 
-def part1(self):
+def part1(lines):
 	total = 0
 
 	return total
 
-def part2(self):
+def part2(lines):
 	total = 0
 
 	return total
