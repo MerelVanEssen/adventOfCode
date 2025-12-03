@@ -33,12 +33,8 @@ def result(lines):
 				total2 += n
 	return total1, total2
 
-def main():
-	f = open("input/02.txt", "r")
-	input = f.read()
-	lines  = input.split(',')
-	print("Results:", result(lines))
-	f.close() 
-
-if __name__ == "__main__":
-	main()
+f = open("input/02.txt", "r")
+input = f.read()
+lines  = input.split(',')
+print("Results:", result(lines))
+f.close() 

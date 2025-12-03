@@ -30,13 +30,9 @@ def part2(lines):
 				zeros += 1
 	return zeros
 
-def main():
-	f = open("input/01.txt", "r")
-	input = f.read()
-	lines  = input.split('\n')
-	print("Part 1:", part1(lines))
-	print("Part 2:", part2(lines))
-	f.close() 
-
-if __name__ == "__main__":
-	main()
+f = open("input/01.txt", "r")
+input = f.read()
+lines  = input.split('\n')
+print("Part 1:", part1(lines))
+print("Part 2:", part2(lines))
+f.close() 

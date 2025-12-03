@@ -1,39 +1,26 @@
-# python3 -m venv venv
-from collections import deque, defaultdict, Counter
-import re
-from math import gcd
-from functools import reduce, cache, lru_cache
-import sys
-import heapq
-from itertools import permutations
-import networkx as nx
-from z3 import *
-from aoc import countSymbolInMap
-from aoc import turnMapBackwardsList
+# --- Day 3: Largest Number Combination ---
 
-# self.hands = [[] for _ in range(7)]
-# inte = [int(x) for x in line]
-# self.field = [['.' for _ in row] for row in self.map]
+def search_biggest_combination(line, keep):
+	to_remove = len(line) - keep
+	stack = []
+	for n in line:
+		while to_remove > 0 and stack and stack[-1] < n:
+			stack.pop()
+			to_remove -= 1
+		stack.append(n)
+	return int(''.join(stack[:keep]))
 
-def part1(self):
-	total = 0
+def result(lines):
+	total1, total2 = 0, 0
+	for line in lines:
+		total1 += search_biggest_combination(line, 2)
+		total2 += search_biggest_combination(line, 12)
+	return total1, total2
 
-	return total
-
-def part2(self):
-	total = 0
-
-	return total
-
-def main():
-	filename = "input/03.txt"
-	print("Using input file:", filename)
-	f = open(filename, "r")
-	input = f.read()
-	lines  = input.split('\n')
-	print("Part 1:", part1(lines))
-	print("Part 2:", part2(lines))
-	f.close() 
-
-if __name__ == "__main__":
-	main()
+filename = "input/03.txt"
+print("Using input file:", filename)
+f = open(filename, "r")
+input = f.read()
+lines  = input.split('\n')
+print("Results:", result(lines))
+f.close()
