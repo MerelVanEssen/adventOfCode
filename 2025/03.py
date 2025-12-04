@@ -1,4 +1,4 @@
-# --- Day 3: Largest Number Combination ---
+# DAY 3: Largest Number Combination
 
 def search_biggest_combination(line, keep):
 	to_remove = len(line) - keep

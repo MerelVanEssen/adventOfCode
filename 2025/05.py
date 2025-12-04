@@ -26,7 +26,7 @@ def part2(lines):
 
 	return total
 
-filename = "input/00.txt"
+filename = "input/05.txt"
 print("Using input file:", filename)
 f = open(filename, "r")
 input = f.read()

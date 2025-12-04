@@ -1,3 +1,5 @@
+# Advent of Code 2021 Day 3: Bit counting
+
 from aoc import createMap, turnMapBackwardsList, bitsToDecimal
 
 # Return multiplication of most common bits and least common bits

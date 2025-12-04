@@ -1,4 +1,4 @@
-# Advent of Code 2021 - Day 4	
+# Advent of Code 2021 Day 4: Bingo
 
 # check if a board has bingo
 def checkBingo(board):
